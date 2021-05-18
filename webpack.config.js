@@ -8,6 +8,15 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
     filename: "bundle.js",
   },
+  devServer: {
+    port: 8080,
+    hot: true,
+    contentBase: "./client",
+    publicPath: "/build/",
+    // proxy: {
+    //   "/": "http://localhost:3000",
+    // },
+  },
   module: {
     rules: [
       {
@@ -36,13 +45,5 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx"],
-  },
-  devServer: {
-    port: 8080,
-    hot: true,
-    publicPath: "./build",
-    proxy: {
-      "/": "http://localhost:3000",
-    },
   },
 };
