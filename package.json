@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/teamblastoise/keepr#readme",
   "dependencies": {
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "passport": "^0.4.1",
     "postgres": "^1.0.2",
