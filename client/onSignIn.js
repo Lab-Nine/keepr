@@ -12,5 +12,5 @@ function onSignIn(googleUser) {
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
   idToken = googleUser.getAuthResponse().id_token;
-  console.log('ID Token: ' + id_token);
+  console.log('ID Token: ' + idToken);
 }
