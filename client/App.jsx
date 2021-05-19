@@ -9,7 +9,7 @@ class App extends React.Component {
   render() {
     console.log('app render');
     return (
-      <div>App.jsx</div>
+      <div>asdfasdf</div>
     );
   }
 }
