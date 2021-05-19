@@ -44,23 +44,23 @@ app.get('/auth/google/callback',
 
 // middleware to check if user is logged in
 const checkUserLoggedIn = (req, res, next) => {
-  console.log(req.user);
   req.user ? next() : res.sendStatus(401);
 };
 
-app.get('/profile', checkUserLoggedIn, (req, res) => {
-  res.send(`<h1>${req.user.emails[0].value}</h1>`);
-});
-
-async function verify() {
+const verify = (req, res, next) => {
+  const { token } = req.body;
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: process.env.GOOGLE_CLIENT_ID,
   });
   const payload = ticket.getPayload;
   const userid = payload['sub'];
+  return next();
 }
-// verify().catch(console.error);
+
+app.get('/profile', checkUserLoggedIn, (req, res) => {
+  res.send(`<h1>${req.user.emails[0].value}</h1>`);
+});
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
