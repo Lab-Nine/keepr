@@ -39,14 +39,14 @@ app.get('/auth/google/callback',
     res.redirect('/');
   });
 
-// const checkUserLoggedIn = (req, res, next) => {
-//   console.log(req.user);
-//   req.user ? next() : res.sendStatus(401);
-// };
+const checkUserLoggedIn = (req, res, next) => {
+  console.log(req.user);
+  req.user ? next() : res.sendStatus(401);
+};
 
-// app.get('/profile', checkUserLoggedIn, (req, res) => {
-//   res.send(`<h1>${req.user}</h1>`);
-// });
+app.get('/profile', checkUserLoggedIn, (req, res) => {
+  res.send(`<h1>${req.user.emails[0].value}</h1>`);
+});
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
