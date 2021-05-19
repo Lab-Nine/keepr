@@ -1,6 +1,8 @@
 // called upon successful user authentication and login
 // logs basic profile info and id token
 // will not work in Incognito tabs
+let idToken;
+
 function onSignIn(googleUser) {
   console.log('onSignIn');
   const profile = googleUser.getBasicProfile();
@@ -9,6 +11,6 @@ function onSignIn(googleUser) {
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-  const id_token = googleUser.getAuthResponse().id_token;
+  idToken = googleUser.getAuthResponse().id_token;
   console.log('ID Token: ' + id_token);
 }
