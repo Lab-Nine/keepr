@@ -1,5 +1,6 @@
 // called upon successful user authentication and login
 // logs basic profile info and id token
+// will not work in Incognito tabs
 function onSignIn(googleUser) {
   console.log('onSignIn');
   const profile = googleUser.getBasicProfile();
