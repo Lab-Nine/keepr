@@ -47,7 +47,7 @@ const checkUserLoggedIn = (req, res, next) => {
   req.user ? next() : res.sendStatus(401);
 };
 
-const verify = (req, res, next) => {
+const verify = async (req, res, next) => {
   const { token } = req.body;
   const ticket = await client.verifyIdToken({
     idToken: token,
