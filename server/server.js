@@ -6,6 +6,9 @@ const app = express();
 const path = require('path');
 require('./passport');
 
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 const PORT = 3000;
 
 app.use(cookieSession({
@@ -39,6 +42,7 @@ app.get('/auth/google/callback',
     res.redirect('/');
   });
 
+// middleware to check if user is logged in
 const checkUserLoggedIn = (req, res, next) => {
   console.log(req.user);
   req.user ? next() : res.sendStatus(401);
@@ -47,6 +51,16 @@ const checkUserLoggedIn = (req, res, next) => {
 app.get('/profile', checkUserLoggedIn, (req, res) => {
   res.send(`<h1>${req.user.emails[0].value}</h1>`);
 });
+
+async function verify() {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+  const payload = ticket.getPayload;
+  const userid = payload['sub'];
+}
+// verify().catch(console.error);
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
