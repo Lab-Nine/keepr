@@ -1,3 +1,4 @@
+import { set } from "js-cookie";
 import React, { useEffect, useState } from "react";
 import {
   useParams
@@ -7,6 +8,7 @@ export default function ItemsInPossession() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
+  const [refresh, setRefresh] = useState([]);
   const username =  useParams();
 
   // Note: the empty deps array [] means
@@ -35,12 +37,43 @@ export default function ItemsInPossession() {
           setError(error);
         }
       )
-  }, [])
+  }, [isLoaded])
+
+  const borrow = (id) => {
+    // useEffect(() => {
+    // setIsLoaded(false);
+    fetch('/api/borrowItem', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id})
+    })
+      .then(()=> setIsLoaded(false))
+
+  }
+  
+  // const fetchRequest = useCallback(() => {
+  //   // Api request here
+  //   fetch('/api/borrowItem', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({id})
+  //   })
+  // }, [id]);
 
   const results = [];
 
   items.map(item => {
-    results.push(<tr key={item.thingid}><td>{item.thingname}</td><td>{item.thingdescription}</td></tr>)
+    if(!username.username){
+      results.push(<tr key={item.thingid}><td>{item.thingname}</td><td>{item.thingdescription}</td></tr>)
+    }
+    else {
+      results.push(<tr key={item.thingid}><td>{item.thingname}</td><td>{item.thingdescription}</td><td><button onClick={() => borrow(item.thingid)}>Borrow</button></td></tr>)
+    }
+    
   })
 
   if (error) {

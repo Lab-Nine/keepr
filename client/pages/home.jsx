@@ -3,6 +3,7 @@ import MaterialTable from 'material-table';
 import ItemsLent from '../components/itemslent.jsx';
 import UploadModal from '../components/uploadmodal.jsx';
 import ItemsInPossession from '../components/itemsInPossession.jsx';
+import ItemsBorrowed from '../components/itemsborrowed.jsx';
 import {
   Redirect
 } from "react-router-dom";
@@ -77,7 +78,7 @@ export default class Home extends React.Component {
             <tr>
               <th>Name of Item</th>
               <th>Description of Item</th>
-              <th>Item ID</th>
+              <th>Borrower Username</th>
             </tr>
           </thead>
           <tbody>
@@ -95,11 +96,12 @@ export default class Home extends React.Component {
             <tr>
               <th>Name of Item</th>
               <th>Description of Item</th>
-              <th>Item ID</th>
+              <th>Loaner Username</th>
+              <th>Wanna Return That?</th>
             </tr>
           </thead>
           <tbody>
-            <ItemsLent/>
+            <ItemsBorrowed/>
           </tbody>
         </table>
       </div>
@@ -113,6 +115,7 @@ export default class Home extends React.Component {
             <tr>
               <th>Name of Item</th>
               <th>Description of Item</th>
+            
 
             </tr>
           </thead>

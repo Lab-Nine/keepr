@@ -7,6 +7,7 @@ export default function ItemsBorrowed() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
+  const username =  useParams();
 
   // Note: the empty deps array [] means
   // this useEffect will run once
@@ -22,6 +23,7 @@ export default function ItemsBorrowed() {
       .then(res => res.json())
       .then(
         (result) => {
+          console.log('result', result)
           setIsLoaded(true);
           setItems(result);
         },
@@ -33,14 +35,33 @@ export default function ItemsBorrowed() {
           setError(error);
         }
       )
-  }, [])
+  }, [isLoaded])
+
+  const returnItem = (id) => {
+    // useEffect(() => {
+    // setIsLoaded(false);
+    console.log(id, 'id')
+    fetch('/api/returnItem', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id})
+    })
+      .then((res)=> {
+        setIsLoaded(false)
+      })
+  }
 
   const results = [];
 
   items.map(item => {
-    results.push(<tr key={item.id}>
-      {item.name} {item.price}
-    </tr>)
+    if(username.username){
+      results.push(<tr key={item.thingid}><td>{item.thingname}</td><td>{item.thingdescription}</td><td>{item.username}</td></tr>)
+    }
+    else {
+      results.push(<tr key={item.thingid}><td>{item.thingname}</td><td>{item.thingdescription}</td><td>{item.username}</td><td><button onClick={() => returnItem(item.thingid)}>Return</button></td></tr>)
+    }
   })
 
   if (error) {

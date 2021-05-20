@@ -42,9 +42,7 @@ export default function ItemsLent() {
   const results = [];
 
   items.map(item => {
-    results.push(<tr key={item.id}>
-      {item.name} {item.price}
-    </tr>)
+    results.push(<tr key={item.thingid}><td>{item.thingname}</td><td>{item.thingdescription}</td><td>{item.username}</td></tr>)
   })
 
   if (error) {

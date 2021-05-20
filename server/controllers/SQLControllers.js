@@ -105,7 +105,7 @@ controllers.getLentItems = (req, res, next) => {
 controllers.getBorrowedItems = (req, res, next) => {
   const getBorrowedValues = [res.locals.userId];
   const getBorrowedRequest =
-    "SELECT Things.ThingName, Things.ThingDescription, Transactions.StartDate, Users.UserName " +
+    "SELECT Things.ThingName, Things.ThingDescription, Transactions.StartDate, Users.UserName, Things.ThingId " +
     "FROM Things INNER JOIN Transactions ON Things.ThingID = Transactions.ThingID " +
     "INNER JOIN Users ON Things.ThingOwnerId = Users.UserID " +
     "WHERE Transactions.UserID=$1;";
@@ -118,7 +118,7 @@ controllers.getBorrowedItems = (req, res, next) => {
 };
 
 controllers.borrowItem = (req, res, next) => {
-  const borrowValue = [req.body.thingId, res.locals.userId];
+  const borrowValue = [req.body.id, res.locals.userId];
   const borrowRequest = "INSERT INTO Transactions " +
     "(ThingID, UserID) " +
     "VALUES ($1,$2);";
@@ -130,7 +130,9 @@ controllers.borrowItem = (req, res, next) => {
 };
 
 controllers.returnItem = (req, res, next) => {
-  const returnValue = [req.body.thingId];
+  const returnValue = [req.body.id];
+  console.log('returnValue', returnValue)
+  console.log('RETURNING ITEM IN SERVER')
   const returnRequest = "DELETE FROM Transactions WHERE ThingID=$1";
   db.query(returnRequest, returnValue)
     .then((data) => {

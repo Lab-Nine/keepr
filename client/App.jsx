@@ -53,14 +53,14 @@ export default class App extends Component {
   render() {
     if (this.state.isLoggedIn){
       return (<Router>
-        <div>
+        <Switch>
           <Route exact path="/">
             <Home />
           </Route>
           <Route path="/user/:username">
             <User />
           </Route>
-        </div>
+        </Switch>
       </Router>)
     }
     else {
