@@ -22,7 +22,7 @@ router.post(
   },
 );
 
-router.get(
+router.post(
   "/itemsInPossession",
   controllers.getUserId,
   controllers.getItemsInPossession,
@@ -31,8 +31,9 @@ router.get(
   },
 );
 
-router.get(
+router.post(
   "/itemsLent",
+  (req, res, next) => {console.log('hi'); next()},
   controllers.getUserId,
   controllers.getLentItems,
   (req, res) => {
@@ -40,7 +41,7 @@ router.get(
   },
 );
 
-router.get(
+router.post(
   "/itemsBorrowed",
   controllers.getUserId,
   controllers.getBorrowedItems,
@@ -66,12 +67,11 @@ router.post(
   },
 );
 
-router.get(
+router.post(
   "/search",
   controllers.searchUser,
-  controllers.getItemsInPossession,
   (req, res) => {
-    res.status(200).json(res.locals.itemsInPossession);
+    res.status(200).json(res.locals.valid);
   },
 );
 

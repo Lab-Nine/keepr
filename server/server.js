@@ -59,9 +59,6 @@ app.get(
   },
 );
 
-app.get("/itemsLent");
-app.get("/itemsBorrowed");
-app.get("/itemsInPossession");
 
 // middleware to check if user is logged in
 const checkUserLoggedIn = (req, res, next) => {

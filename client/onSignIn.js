@@ -1,7 +1,6 @@
 // called upon successful user authentication and login
 // logs basic profile info and id token
 // will not work in Incognito tabs
-let idToken;
 
 function onSignIn(googleUser) {
   console.log("onSignIn");
@@ -25,7 +24,7 @@ function onSignIn(googleUser) {
   })
     // .then(response => response.json())
     .catch((err) => console.log("could not login"));
-  idToken = googleUser.getAuthResponse().id_token;
+  let idToken = googleUser.getAuthResponse().id_token;
   console.log("ID Token: " + idToken);
 
 }

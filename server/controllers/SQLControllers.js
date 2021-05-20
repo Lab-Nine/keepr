@@ -34,9 +34,17 @@ controllers.createUser = (req, res, next) => {
 };
 
 controllers.getUserId = (req, res, next) => {
-  //   const userIdArr = [res.cookies.userOauthId];
-  const userIdArr = ["104900875744471349343"];
-  const userIdRequest = "SELECT userid FROM users WHERE oauth = $1;";
+  let userIdArr;
+  let userIdRequest
+  if (req.body.username) {
+    userIdArr = [req.body.username];
+    userIdRequest = "SELECT userid FROM users WHERE username = $1;";
+  } else {
+    userIdArr = [req.cookies.userOauthId];
+    userIdRequest = "SELECT userid FROM users WHERE oauth = $1;";
+  }
+  // const userIdArr = [req.cookies.userOauthId];
+  // const userIdRequest = "SELECT userid FROM users WHERE oauth = $1;";
   db.query(userIdRequest, userIdArr)
     .then((data) => {
       const userIdObj = data.rows[0];
@@ -52,8 +60,8 @@ controllers.newItem = (req, res, next) => {
   console.log("reqbody: ", req.body);
   const newItemValues = [
     res.locals.userId,
-    req.body.itemName,
-    req.body.itemDesc,
+    req.body.name,
+    req.body.desc,
   ];
   const newItemRequest = "INSERT INTO Things " +
     "(ThingOwnerID, ThingName, ThingDescription) " +
@@ -97,7 +105,7 @@ controllers.getLentItems = (req, res, next) => {
 controllers.getBorrowedItems = (req, res, next) => {
   const getBorrowedValues = [res.locals.userId];
   const getBorrowedRequest =
-    "SELECT Things.ThingName, Things.ThingDescription, Transactions.StartDate, Users.UserName " +
+    "SELECT Things.ThingName, Things.ThingDescription, Transactions.StartDate, Users.UserName, Things.ThingId " +
     "FROM Things INNER JOIN Transactions ON Things.ThingID = Transactions.ThingID " +
     "INNER JOIN Users ON Things.ThingOwnerId = Users.UserID " +
     "WHERE Transactions.UserID=$1;";
@@ -110,7 +118,7 @@ controllers.getBorrowedItems = (req, res, next) => {
 };
 
 controllers.borrowItem = (req, res, next) => {
-  const borrowValue = [req.body.thingId, res.locals.userId];
+  const borrowValue = [req.body.id, res.locals.userId];
   const borrowRequest = "INSERT INTO Transactions " +
     "(ThingID, UserID) " +
     "VALUES ($1,$2);";
@@ -122,7 +130,9 @@ controllers.borrowItem = (req, res, next) => {
 };
 
 controllers.returnItem = (req, res, next) => {
-  const returnValue = [req.body.thingId];
+  const returnValue = [req.body.id];
+  console.log('returnValue', returnValue)
+  console.log('RETURNING ITEM IN SERVER')
   const returnRequest = "DELETE FROM Transactions WHERE ThingID=$1";
   db.query(returnRequest, returnValue)
     .then((data) => {
@@ -132,13 +142,17 @@ controllers.returnItem = (req, res, next) => {
 };
 
 controllers.searchUser = (req, res, next) => {
-  const searchValue = [req.body.search];
+  const searchValue = [req.body.term];
   const searchRequest = "SELECT userid FROM users WHERE UserName = $1;";
   db.query(searchRequest, searchValue)
     .then((data) => {
-      const userIdObj = data.rows[0];
-      res.locals.userId = userIdObj.userid;
-      console.log("in user id res locals", res.locals.userId);
+      if (data.rows.length === 0) res.locals.valid = false;
+      else {
+        const userIdObj = data.rows[0];
+        res.locals.userId = userIdObj.userid;
+        res.locals.valid = true;
+        console.log("in user id res locals", res.locals.userId);
+      }
       return next();
     })
     .catch((err) => console.log(err));
