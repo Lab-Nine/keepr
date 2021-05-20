@@ -12,7 +12,10 @@ module.exports = {
     port: 8080,
     hot: true,
     contentBase: "./client",
-    publicPath: "/build"
+    publicPath: "/build",
+    proxy: {
+      "/api/*": "http://localhost:3000",
+    },
   },
   module: {
     rules: [
