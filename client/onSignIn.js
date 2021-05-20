@@ -27,4 +27,5 @@ function onSignIn(googleUser) {
     .catch((err) => console.log("could not login"));
   idToken = googleUser.getAuthResponse().id_token;
   console.log("ID Token: " + idToken);
+
 }

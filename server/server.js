@@ -9,6 +9,7 @@ require("./passport");
 const apiRouter = require("./routes/api");
 
 const { OAuth2Client } = require("google-auth-library");
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const PORT = 3000;
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 console.log(process.env.NODE_ENV);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -64,6 +66,7 @@ app.get("/itemsInPossession");
 // middleware to check if user is logged in
 const checkUserLoggedIn = (req, res, next) => {
   console.log("req.user", req.user);
+
   req.user ? next() : res.sendStatus(401);
 };
 
@@ -92,6 +95,7 @@ app.use((err, req, res, next) => {
   console.log(errorObj);
   return res.status(errorObj.status).json(errorObj.message);
 });
+
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
