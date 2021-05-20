@@ -16,18 +16,12 @@ export default class App extends Component {
     this.state = {
       isLoggedIn: true
     }
-    this.search = this.search.bind(this);
   }
-  search() {
-    console.log('search')
-    fetch("/search")
-      .then(res => res.json())
-      .then()
-  }
+
   
   render() {
     if (this.state.isLoggedIn){
-      return <Home search={this.search}/>
+      return <Home/>
     }
     else {
       return <Login /> 
