@@ -36,3 +36,4 @@ const UploadModal = (props) => {
 }
 
 export default UploadModal;
+

@@ -20,6 +20,7 @@ export default class User extends React.Component {
     this.addItem = this.addItem.bind(this);
     this.cancel = this.cancel.bind(this);
   }
+  // const username =  useParams();
 
   search(term) {
     console.log('search', term)
@@ -67,6 +68,7 @@ export default class User extends React.Component {
       return <Redirect to='/'/>
     }
     else if(this.state.redirect == true){
+      console.log('dreictredirected')
       let redirectURL = "/user/" + this.state.username;
       return <Redirect to={redirectURL}/>
     }
@@ -82,7 +84,9 @@ export default class User extends React.Component {
               aria-describedby="search-addon" />
             <button id="searchbutton" type="button" className="btn btn-outline-primary" onClick={()=>{this.search(document.getElementById('search').value);}}>search</button>
           </div>
-        
+          <div id='username'>
+         
+          </div>
           <div className='itemsLent'>
             <div className='tableTitle'>
               items lent

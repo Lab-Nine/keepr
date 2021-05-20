@@ -4,7 +4,7 @@ import {
   useParams
 } from "react-router-dom";
 
-export default function ItemsInPossession() {
+export default function ItemsInPossession(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -14,6 +14,11 @@ export default function ItemsInPossession() {
   // Note: the empty deps array [] means
   // this useEffect will run once
   // similar to componentDidMount()
+
+  // const [value, setValue] = useState(props.reload);
+
+  // useEffect(() => { setValue(props.reload) }, [props.reload]);
+
   useEffect(() => {
     fetch('/api/itemsInPossession', {
       method: 'POST',

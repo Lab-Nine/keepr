@@ -13,7 +13,8 @@ export default class Home extends React.Component {
     super(props);
     this.state = {
       show:false,
-      redirect:false
+      redirect:false,
+      reload:0,
     }
     this.search = this.search.bind(this);
     this.addItem = this.addItem.bind(this);
@@ -52,6 +53,7 @@ export default class Home extends React.Component {
       },
       body: JSON.stringify({name, desc})
     })
+    window.location.reload();
   }
   render () { 
     if(this.state.redirect == true){
@@ -120,7 +122,7 @@ export default class Home extends React.Component {
             </tr>
           </thead>
           <tbody>
-            <ItemsInPossession/>
+            <ItemsInPossession reload={this.state.reload}/>
           </tbody>
         </table>
       </div>

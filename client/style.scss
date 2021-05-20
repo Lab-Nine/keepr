@@ -1,7 +1,7 @@
 @import '~mdb-ui-kit/css/mdb.min.css';
 body {
   margin: 0;
-  overflow:hidden;
+  // overflow:hidden;
 }
 
 .modal {
@@ -96,7 +96,7 @@ td {
   padding: 2px;
   border: 1px solid #333333;
   border-collapse: collapse;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .tableTitle {
@@ -118,11 +118,12 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 25%;
+  width: 20%;
   background-color: #f1f1f1;
-  // position: fixed;
+  position: fixed;
   height: 100%;
-  // overflow: auto;
+  overflow: auto;
+  z-index: 1;
 }
 
 li {
@@ -132,16 +133,19 @@ li {
   text-decoration: none;
   background-color: #765eb6;
   color: white;
+  text-align: center;
 }
 
 button {
   background-color: Transparent;
   background-repeat:no-repeat;
   border: none;
-  overflow: hidden;
+  // overflow: hidden;
   outline:none;
   text-align: center;
-  display: inline-block;
+  // margin-left: auto;
+  // padding: 140px;
+  // margin-right: auto;
 }
 
 li:hover:not(.navbar) {
@@ -160,17 +164,17 @@ li:hover:not(.navbar) {
 }
 
 .itemsLent {
-  margin-left:25%;
+  margin-left:20%;
   padding:1px 16px;
 }
 
 .itemsBorrowed {
-  margin-left:25%;
+  margin-left:20%;
   padding:1px 16px;
 }
 
 .itemsInPossession {
-  margin-left:25%;
+  margin-left:20%;
   padding:1px 16px;
 }
 
