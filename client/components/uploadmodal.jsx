@@ -22,7 +22,7 @@ const UploadModal = (props) => {
           <input id='itemName' onChange={onNameChange} placeholder='Enter Name of Item' className='form username' />
           <input id='itemDesc' onChange={onDescChange} placeholder='Enter Description of Item' className='form password' />
           <div id='modalButtons'>
-            <button id='uploadItem' onClick={() => props.addItem(itemName, desc)}>Submit Item</button>
+            <button id='uploadItem' onClick={() => {props.addItem(itemName, desc); props.cancel()}}>Submit Item</button>
             <button id='cancelButton' onClick={() => props.cancel()}>Cancel</button>
           </div>
         </div>

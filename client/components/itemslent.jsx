@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from "react";
+import {
+  useParams
+} from "react-router-dom";
 
 export default function ItemsLent() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
-
+  const username =  useParams();
+  console.log('hihihihi', username)
   // Note: the empty deps array [] means
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("/api/itemsLent")
+
+    fetch('/api/itemsLent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(username)
+    })
+    // fetch("/api/itemsLent")
       .then(res => res.json())
       .then(
         (result) => {
+          console.log("in itemsLEnt", result);
           setIsLoaded(true);
           setItems(result);
         },

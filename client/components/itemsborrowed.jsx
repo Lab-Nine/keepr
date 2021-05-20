@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import {
+  useParams
+} from "react-router-dom";
 
 export default function ItemsBorrowed() {
   const [error, setError] = useState(null);
@@ -9,7 +12,13 @@ export default function ItemsBorrowed() {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("/api/itemsBorrowed")
+    fetch('/api/itemsBorrowed', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(username)
+    })
       .then(res => res.json())
       .then(
         (result) => {

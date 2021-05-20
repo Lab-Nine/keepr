@@ -4,20 +4,20 @@ import ItemsLent from '../components/itemslent.jsx';
 import UploadModal from '../components/uploadmodal.jsx';
 import ItemsInPossession from '../components/itemsInPossession.jsx';
 import {
-  Redirect
+  Redirect, useParams
 } from "react-router-dom";
 
-export default class Home extends React.Component {
+export default class User extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      show:false,
-      redirect:false
+      show:false
     }
     this.search = this.search.bind(this);
     this.addItem = this.addItem.bind(this);
     this.cancel = this.cancel.bind(this);
   }
+
   search(term) {
     console.log('search', term)
     fetch('/api/search', {
@@ -29,9 +29,9 @@ export default class Home extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
+        console.log('imhere', res)
         if(res === true){
-          console.log('imhereerere', res);
-          this.setState({redirect:true, username: term})
+
         }
       })
   }
@@ -52,13 +52,14 @@ export default class Home extends React.Component {
       body: JSON.stringify({name, desc})
     })
   }
+  // componentDidMount(){
+  //   console.log('hi', useParams());
+  // }
   render () { 
-    if(this.state.redirect == true){
-      let redirectURL = "/user/" + this.state.username;
-      return <Redirect to={redirectURL}/>
-    }
-    else return (
+
+    return (
     <div className="homebox">
+      KSLDJKLASDJLAKSJDASKLDJASKLDJASLKJD GIEIHDIHDIOAEHDIAEHDILAEHDALEHDKJLASHDALKSJDHJLASHDKJASHDjaKSHFdkajshdkjDNKJASDNKA
       <ul>
         <li><button id='navBarButton' className="navbar" onClick={()=> this.upload()}>Upload Your Item</button></li>
       </ul>
