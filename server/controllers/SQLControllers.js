@@ -1,0 +1,147 @@
+const db = require("../models/allModels");
+
+const controllers = {};
+
+controllers.userLogin = (req, res, next) => {
+  res.cookie("userOauthId", req.body.oauth);
+  console.log("reqbody: ", req.body);
+  const checkArr = [req.body.oauth];
+  const loginCheck = "SELECT * FROM users " +
+    "WHERE oauth=$1;";
+  db.query(loginCheck, checkArr)
+    .then((data) => {
+      console.log("in userlogin: ", data.rowCount);
+      res.locals.users = data.rowCount;
+      return next();
+    })
+    .catch((err) => console.log(err));
+};
+
+controllers.createUser = (req, res, next) => {
+  if (res.locals.users !== 0) return next();
+  console.log("req body: ", req.body);
+  const valuesArr = [req.body.oauth, req.body.username];
+  const newUserRequest = "INSERT INTO Users " +
+    "(oauth, username) " +
+    "VALUES ($1, $2);";
+  db.query(newUserRequest, valuesArr)
+    .then((data) => {
+      //   console.log("in createUser: ", data);
+      res.locals.newUser = data;
+      return next();
+    })
+    .catch((err) => console.log(err));
+};
+
+controllers.getUserId = (req, res, next) => {
+  //   const userIdArr = [res.cookies.userOauthId];
+  const userIdArr = ["104900875744471349343"];
+  const userIdRequest = "SELECT userid FROM users WHERE oauth = $1;";
+  db.query(userIdRequest, userIdArr)
+    .then((data) => {
+      const userIdObj = data.rows[0];
+      res.locals.userId = userIdObj.userid;
+      console.log("in user id res locals", res.locals.userId);
+
+      return next();
+    })
+    .catch((err) => console.log(err));
+};
+
+controllers.newItem = (req, res, next) => {
+  console.log("reqbody: ", req.body);
+  const newItemValues = [
+    res.locals.userId,
+    req.body.itemName,
+    req.body.itemDesc,
+  ];
+  const newItemRequest = "INSERT INTO Things " +
+    "(ThingOwnerID, ThingName, ThingDescription) " +
+    "VALUES ($1,$2,$3);";
+  db.query(newItemRequest, newItemValues)
+    .then((data) => {
+      console.log("in newItem", data);
+      return next();
+    });
+};
+
+controllers.getItemsInPossession = (req, res, next) => {
+  const getItemsValues = [res.locals.userId];
+  const getItemsRequest =
+    "SELECT Things.ThingName, Things.ThingDescription, Things.ThingID " +
+    "FROM Things LEFT OUTER JOIN Transactions " +
+    "ON Things.ThingID = Transactions.ThingID " +
+    "WHERE Things.ThingOwnerID=$1 AND Transactions.TransactionID IS NULL;";
+  db.query(getItemsRequest, getItemsValues)
+    .then((data) => {
+      res.locals.itemsInPossession = data.rows;
+      return next();
+    })
+    .catch((err) => console.log("inposs err: ", err));
+};
+
+controllers.getLentItems = (req, res, next) => {
+  const getLentValues = [res.locals.userId];
+  const getItemsRequest =
+    "SELECT Things.ThingName, Things.ThingDescription, Transactions.StartDate, Users.UserName " +
+    "FROM Transactions INNER JOIN Things ON Things.ThingID = Transactions.ThingID " +
+    "INNER JOIN Users ON Transactions.userID = Users.UserID " +
+    "WHERE Things.ThingOwnerID=$1 AND Transactions.TransactionID IS NOT NULL;";
+  db.query(getItemsRequest, getLentValues)
+    .then((data) => {
+      res.locals.itemsLent = data.rows;
+      return next();
+    });
+};
+
+controllers.getBorrowedItems = (req, res, next) => {
+  const getBorrowedValues = [res.locals.userId];
+  const getBorrowedRequest =
+    "SELECT Things.ThingName, Things.ThingDescription, Transactions.StartDate, Users.UserName " +
+    "FROM Things INNER JOIN Transactions ON Things.ThingID = Transactions.ThingID " +
+    "INNER JOIN Users ON Things.ThingOwnerId = Users.UserID " +
+    "WHERE Transactions.UserID=$1;";
+  db.query(getBorrowedRequest, getBorrowedValues)
+    .then((data) => {
+      res.locals.itemsBorrowed = data.rows;
+      return next();
+    })
+    .catch((err) => console.log("get borrowed items err: ", err));
+};
+
+controllers.borrowItem = (req, res, next) => {
+  const borrowValue = [req.body.thingId, res.locals.userId];
+  const borrowRequest = "INSERT INTO Transactions " +
+    "(ThingID, UserID) " +
+    "VALUES ($1,$2);";
+  db.query(borrowRequest, borrowValue)
+    .then((data) => {
+      console.log("borrow success");
+      return next();
+    });
+};
+
+controllers.returnItem = (req, res, next) => {
+  const returnValue = [req.body.thingId];
+  const returnRequest = "DELETE FROM Transactions WHERE ThingID=$1";
+  db.query(returnRequest, returnValue)
+    .then((data) => {
+      console.log("return success");
+      return next();
+    });
+};
+
+controllers.searchUser = (req, res, next) => {
+  const searchValue = [req.body.search];
+  const searchRequest = "SELECT userid FROM users WHERE UserName = $1;";
+  db.query(searchRequest, searchValue)
+    .then((data) => {
+      const userIdObj = data.rows[0];
+      res.locals.userId = userIdObj.userid;
+      console.log("in user id res locals", res.locals.userId);
+      return next();
+    })
+    .catch((err) => console.log(err));
+};
+
+module.exports = controllers;

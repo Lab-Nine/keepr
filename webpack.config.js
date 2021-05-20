@@ -13,9 +13,10 @@ module.exports = {
     hot: true,
     contentBase: "./client",
     publicPath: "/build",
-    // proxy: {
-    //   '/auth/google': '/http://localhost:3000',
-    // },
+    proxy: {
+      "/api/*": "http://localhost:3000",
+    },
+
   },
   module: {
     rules: [
