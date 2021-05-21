@@ -20,7 +20,6 @@ export default class User extends React.Component {
     this.addItem = this.addItem.bind(this);
     this.cancel = this.cancel.bind(this);
   }
-  // const username =  useParams();
 
   search(term) {
     console.log('search', term)
@@ -31,27 +30,30 @@ export default class User extends React.Component {
       },
       body: JSON.stringify({term})
     })
-      .then(res => res.json())
-      .then(res => {
+    .then(res => res.json())
+    .then(res => {
         console.log('imhere', res)
         if(res === true){
           console.log('imhereerere', res);
           this.setState({redirect:true, username: term})
         }
-      })
+    })
   }
+
   cancel(){
     this.setState({show:false})
   }
+
   upload(){
     console.log('upload')
     this.setState({show: true}, ()=> console.log(this.state))
   }
+
   returnHome(){
     this.setState({returnHome: true})
   }
+
   addItem(name, desc){
-    console.log(name, desc)
     fetch('/api/addItem', {
       method: 'POST',
       headers: {
@@ -60,11 +62,9 @@ export default class User extends React.Component {
       body: JSON.stringify({name, desc})
     })
   }
-  // componentDidMount(){
-  //   console.log('hi', useParams());
-  // }
-  render () { 
-    if(this.state.returnHome == true){
+
+  render () {
+    if (this.state.returnHome == true) {
       return <Redirect to='/'/>
     }
     else if(this.state.redirect == true){
@@ -85,7 +85,6 @@ export default class User extends React.Component {
             <button id="searchbutton" type="button" className="btn btn-outline-primary" onClick={()=>{this.search(document.getElementById('search').value);}}>search</button>
           </div>
           <div id='username'>
-         
           </div>
           <div className='itemsLent'>
             <div className='tableTitle'>
@@ -104,7 +103,6 @@ export default class User extends React.Component {
               </tbody>
             </table>
           </div>
-    
           <div className='itemsBorrowed'>
             <div className='tableTitle'>
               items borrowed
@@ -122,7 +120,6 @@ export default class User extends React.Component {
               </tbody>
             </table>
           </div>
-    
           <div className='itemsInPossession'>
             <div className='tableTitle'>
               items in possession
@@ -140,9 +137,7 @@ export default class User extends React.Component {
               </tbody>
             </table>
           </div>
-    
-          <UploadModal show={this.state.show} addItem={this.addItem} cancel={this.cancel}/> 
-          
+          <UploadModal show={this.state.show} addItem={this.addItem} cancel={this.cancel}/>
         </div>
       )
     }

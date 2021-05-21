@@ -23,9 +23,6 @@ app.use(cookieSession({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-console.log(process.env.NODE_ENV);
-
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -37,9 +34,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use("/api", apiRouter);
-
-// Enable Cors
-// app.use(cors());
 
 app.get(
   "/auth/google",
@@ -59,11 +53,7 @@ app.get(
   },
 );
 
-
-// middleware to check if user is logged in
 const checkUserLoggedIn = (req, res, next) => {
-  console.log("req.user", req.user);
-
   req.user ? next() : res.sendStatus(401);
 };
 
@@ -89,10 +79,8 @@ app.use((err, req, res, next) => {
     message: { err: "an error has occurred" },
   };
   const errorObj = { ...defaultErr, err };
-  console.log(errorObj);
   return res.status(errorObj.status).json(errorObj.message);
 });
-
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);

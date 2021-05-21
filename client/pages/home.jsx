@@ -20,6 +20,7 @@ export default class Home extends React.Component {
     this.addItem = this.addItem.bind(this);
     this.cancel = this.cancel.bind(this);
   }
+
   search(term) {
     console.log('search', term)
     fetch('/api/search', {
@@ -29,23 +30,25 @@ export default class Home extends React.Component {
       },
       body: JSON.stringify({term})
     })
-      .then(res => res.json())
-      .then(res => {
-        if(res === true){
-          console.log('imhereerere', res);
-          this.setState({redirect:true, username: term})
-        }
-      })
+    .then(res => res.json())
+    .then(res => {
+      if(res === true){
+        console.log('imhereerere', res);
+        this.setState({redirect:true, username: term})
+      }
+    })
   }
+
   cancel(){
     this.setState({show:false})
   }
+
   upload(){
     console.log('upload')
     this.setState({show: true}, ()=> console.log(this.state))
   }
+
   addItem(name, desc){
-    console.log(name, desc)
     fetch('/api/addItem', {
       method: 'POST',
       headers: {
@@ -55,7 +58,8 @@ export default class Home extends React.Component {
     })
     window.location.reload();
   }
-  render () { 
+
+  render () {
     if(this.state.redirect == true){
       let redirectURL = "/user/" + this.state.username;
       return <Redirect to={redirectURL}/>
@@ -70,7 +74,6 @@ export default class Home extends React.Component {
           aria-describedby="search-addon" />
         <button id="searchbutton" type="button" className="btn btn-outline-primary" onClick={()=>{this.search(document.getElementById('search').value);}}>search</button>
       </div>
-    
       <div className='itemsLent'>
         <div className='tableTitle'>
           items lent
@@ -88,7 +91,6 @@ export default class Home extends React.Component {
           </tbody>
         </table>
       </div>
-
       <div className='itemsBorrowed'>
         <div className='tableTitle'>
           items borrowed
@@ -107,7 +109,6 @@ export default class Home extends React.Component {
           </tbody>
         </table>
       </div>
-
       <div className='itemsInPossession'>
         <div className='tableTitle'>
           items in possession
@@ -117,8 +118,6 @@ export default class Home extends React.Component {
             <tr>
               <th>Name of Item</th>
               <th>Description of Item</th>
-            
-
             </tr>
           </thead>
           <tbody>
@@ -126,9 +125,7 @@ export default class Home extends React.Component {
           </tbody>
         </table>
       </div>
-
-      <UploadModal show={this.state.show} addItem={this.addItem} cancel={this.cancel}/> 
-      
+      <UploadModal show={this.state.show} addItem={this.addItem} cancel={this.cancel}/>
     </div>
   )}
 }
