@@ -4,13 +4,11 @@ const controllers = {};
 
 controllers.userLogin = (req, res, next) => {
   res.cookie("userOauthId", req.body.oauth);
-  console.log("reqbody: ", req.body);
   const checkArr = [req.body.oauth];
   const loginCheck = "SELECT * FROM users " +
     "WHERE oauth=$1;";
   db.query(loginCheck, checkArr)
     .then((data) => {
-      console.log("in userlogin: ", data.rowCount);
       res.locals.users = data.rowCount;
       return next();
     })
@@ -19,14 +17,12 @@ controllers.userLogin = (req, res, next) => {
 
 controllers.createUser = (req, res, next) => {
   if (res.locals.users !== 0) return next();
-  console.log("req body: ", req.body);
   const valuesArr = [req.body.oauth, req.body.username];
   const newUserRequest = "INSERT INTO Users " +
     "(oauth, username) " +
     "VALUES ($1, $2);";
   db.query(newUserRequest, valuesArr)
     .then((data) => {
-      //   console.log("in createUser: ", data);
       res.locals.newUser = data;
       return next();
     })
@@ -43,21 +39,16 @@ controllers.getUserId = (req, res, next) => {
     userIdArr = [req.cookies.userOauthId];
     userIdRequest = "SELECT userid FROM users WHERE oauth = $1;";
   }
-  // const userIdArr = [req.cookies.userOauthId];
-  // const userIdRequest = "SELECT userid FROM users WHERE oauth = $1;";
   db.query(userIdRequest, userIdArr)
     .then((data) => {
       const userIdObj = data.rows[0];
       res.locals.userId = userIdObj.userid;
-      console.log("in user id res locals", res.locals.userId);
-
       return next();
     })
     .catch((err) => console.log(err));
 };
 
 controllers.newItem = (req, res, next) => {
-  console.log("reqbody: ", req.body);
   const newItemValues = [
     res.locals.userId,
     req.body.name,
@@ -68,7 +59,6 @@ controllers.newItem = (req, res, next) => {
     "VALUES ($1,$2,$3);";
   db.query(newItemRequest, newItemValues)
     .then((data) => {
-      console.log("in newItem", data);
       return next();
     });
 };
@@ -124,19 +114,15 @@ controllers.borrowItem = (req, res, next) => {
     "VALUES ($1,$2);";
   db.query(borrowRequest, borrowValue)
     .then((data) => {
-      console.log("borrow success");
       return next();
     });
 };
 
 controllers.returnItem = (req, res, next) => {
   const returnValue = [req.body.id];
-  console.log('returnValue', returnValue)
-  console.log('RETURNING ITEM IN SERVER')
   const returnRequest = "DELETE FROM Transactions WHERE ThingID=$1";
   db.query(returnRequest, returnValue)
     .then((data) => {
-      console.log("return success");
       return next();
     });
 };
@@ -151,7 +137,6 @@ controllers.searchUser = (req, res, next) => {
         const userIdObj = data.rows[0];
         res.locals.userId = userIdObj.userid;
         res.locals.valid = true;
-        console.log("in user id res locals", res.locals.userId);
       }
       return next();
     })

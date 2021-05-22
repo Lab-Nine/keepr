@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 
 const UploadModal = (props) => {
-  // const showHideClassName = props.show ? "show" : "hide";
-  // console.log(showHideClassName)
-  // return <div>Hi</div>
   const [itemName, setName] = useState('');
   const [desc, setDesc] = useState('');
 
@@ -32,7 +29,6 @@ const UploadModal = (props) => {
   else {
     return null;
   }
-
 }
 
 export default UploadModal;

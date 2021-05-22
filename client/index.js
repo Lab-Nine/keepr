@@ -4,9 +4,4 @@ import App from './App.jsx';
 import './style.scss';
 import { BrowserRouter } from "react-router-dom";
 
-ReactDOM.render(
-	// <BrowserRouter>
-		<App/>,
-	// </BrowserRouter>,
-	document.getElementById('root'),
-);
+ReactDOM.render(<App/>,document.getElementById('root'));

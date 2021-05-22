@@ -9,9 +9,6 @@ export default function ItemsBorrowed() {
   const [items, setItems] = useState([]);
   const username =  useParams();
 
-  // Note: the empty deps array [] means
-  // this useEffect will run once
-  // similar to componentDidMount()
   useEffect(() => {
     fetch('/api/itemsBorrowed', {
       method: 'POST',
@@ -20,27 +17,18 @@ export default function ItemsBorrowed() {
       },
       body: JSON.stringify(username)
     })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          console.log('result', result)
-          setIsLoaded(true);
-          setItems(result);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      )
-  }, [isLoaded])
+    .then(res => res.json())
+    .then((result) => {
+      setIsLoaded(true);
+      setItems(result);
+      },
+      (error) => {
+        setIsLoaded(true);
+        setError(error);
+      })
+    }, [isLoaded])
 
   const returnItem = (id) => {
-    // useEffect(() => {
-    // setIsLoaded(false);
-    console.log(id, 'id')
     fetch('/api/returnItem', {
       method: 'POST',
       headers: {
@@ -48,13 +36,12 @@ export default function ItemsBorrowed() {
       },
       body: JSON.stringify({id})
     })
-      .then((res)=> {
-        setIsLoaded(false)
-      })
+    .then((res)=> {
+      setIsLoaded(false)
+    })
   }
 
   const results = [];
-
   items.map(item => {
     if(username.username){
       results.push(<tr key={item.thingid}><td>{item.thingname}</td><td>{item.thingdescription}</td><td>{item.username}</td></tr>)
@@ -71,5 +58,4 @@ export default function ItemsBorrowed() {
   } else {
     return results
   }
-
-}
+};
